@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meridian Advisory — Strategic Consultancy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ════════════════════════════════
+       TOKENS
+    ════════════════════════════════ */
+    :root {
+      --bg:        #0F2318;
+      --bg-card:   #162E1F;
+      --bg-raise:  #1A3828;
+      --border:    #2A4F36;
+      --cream:     #FBF7EE;
+      --gold:      #C9A84C;
+      --gold-light:#E0C068;
+      --sage:      #8FAF94;
+      --muted:     #607A68;
+      --radius:    3px;
+      --max:       1180px;
+    }
+
+    /* ════════════════════════════════
+       RESET
+    ════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--cream);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ════════════════════════════════
+       TYPOGRAPHY
+    ════════════════════════════════ */
+    .t-display {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 7.5vw, 6.2rem);
+      font-weight: 700;
+      line-height: 1.04;
+      letter-spacing: -0.02em;
+    }
+    .t-display em { font-style: italic; color: var(--gold); }
+    .t-h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.7rem, 3.5vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.15;
+    }
+    .t-h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      font-weight: 700;
+      line-height: 1.25;
+    }
+    .t-body {
+      font-size: clamp(0.9rem, 1.3vw, 1.05rem);
+      line-height: 1.78;
+      color: var(--sage);
+    }
+    .t-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .t-mono {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+    }
+
+    /* ════════════════════════════════
+       LAYOUT
+    ════════════════════════════════ */
+    .wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 clamp(1.25rem, 5vw, 3rem);
+    }
+    .section { padding: clamp(4.5rem, 10vw, 7.5rem) 0; }
+
+    /* ════════════════════════════════
+       BUTTONS
+    ════════════════════════════════ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.82rem 1.65rem;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      border: none;
+      transition: all 0.22s ease;
+      white-space: nowrap;
+    }
+    .btn-gold {
+      background: var(--gold);
+      color: #0F2318;
+    }
+    .btn-gold:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 32px rgba(201,168,76,0.28);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--cream);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover {
+      border-color: var(--sage);
+      color: var(--sage);
+    }
+
+    /* ════════════════════════════════
+       NAV
+    ════════════════════════════════ */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      padding: 1.3rem 0;
+      transition: background 0.35s, border-color 0.35s;
+    }
+    #nav.stuck {
+      background: rgba(15,35,24,0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      color: var(--cream);
+    }
+    .brand-dot {
+      width: 26px; height: 26px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .brand-dot span {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--bg);
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.25rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.83rem;
+      color: var(--sage);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--cream); }
+    @media (max-width: 760px) { .nav-links { display: none; } }
+
+    /* ════════════════════════════════
+       HERO
+    ════════════════════════════════ */
+    #hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: clamp(3.5rem, 8vw, 6rem);
+      position: relative;
+      overflow: hidden;
+    }
+    /* Animated SVG background */
+    .hero-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .hero-canvas svg { width: 100%; height: 100%; }
+    .ring { transform-origin: 720px 450px; }
+    .ring-1 { animation: spin 80s linear infinite; }
+    .ring-2 { animation: spin 50s linear infinite reverse; }
+    .ring-3 { animation: spin 120s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+    .hero-eye {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 2rem;
+    }
+    .hero-eye::before {
+      content: '';
+      display: block;
+      width: 2.2rem;
+      height: 1px;
+      background: var(--gold);
+    }
+    .hero-hl { max-width: 860px; margin-bottom: 1.8rem; }
+    .hero-sub { max-width: 510px; margin-bottom: 2.5rem; }
+    .hero-ctas { display: flex; gap: 0.9rem; flex-wrap: wrap; }
+
+    /* Vertical scroll cue */
+    .scroll-cue {
+      position: absolute;
+      right: clamp(1.25rem, 5vw, 3rem);
+      bottom: 2.8rem;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.45rem;
+      opacity: 0.45;
+    }
+    .scroll-cue span {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 3rem;
+      background: linear-gradient(to bottom, var(--sage), transparent);
+      animation: pulse-line 2.2s ease-in-out infinite;
+    }
+    @keyframes pulse-line {
+      0%, 100% { opacity: 0.25; transform: scaleY(0.65); }
+      50%       { opacity: 1;    transform: scaleY(1);    }
+    }
+
+    /* ════════════════════════════════
+       METRICS BAND
+    ════════════════════════════════ */
+    #metrics {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      /* Use background to create gutters */
+      gap: 1px;
+      background: var(--border);
+    }
+    .metric {
+      background: var(--bg);
+      padding: clamp(1.75rem, 4vw, 2.5rem) clamp(1.5rem, 3.5vw, 2.75rem);
+    }
+    .metric-num {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+      font-weight: 700;
+      line-height: 1;
+      color: var(--cream);
+      margin-bottom: 0.3rem;
+    }
+    .metric-num sup { font-size: 0.45em; vertical-align: super; color: var(--gold); }
+    .metric-desc { font-size: 0.78rem; color: var(--muted); margin-top: 0.15rem; }
+    @media (max-width: 580px) {
+      .metrics-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ════════════════════════════════
+       SERVICES
+    ════════════════════════════════ */
+    #services .sec-head {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(1.5rem, 4vw, 3.5rem);
+      align-items: end;
+      margin-bottom: clamp(3rem, 6vw, 5rem);
+    }
+    @media (max-width: 700px) {
+      #services .sec-head { grid-template-columns: 1fr; }
+    }
+    .svc-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: var(--border);
+    }
+    .svc-card {
+      background: var(--bg-card);
+      padding: clamp(1.75rem, 4vw, 2.8rem);
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    .svc-card::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: 0;
+      width: 0; height: 2px;
+      background: var(--gold);
+      transition: width 0.45s ease;
+    }
+    .svc-card:hover { background: #1F4232; }
+    .svc-card:hover::after { width: 100%; }
+    .svc-icon {
+      width: 42px; height: 42px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+    .svc-card p { font-size: 0.87rem; line-height: 1.75; color: var(--sage); }
+    .svc-more {
+      margin-top: auto;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.66rem;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .svc-card:hover .svc-more { opacity: 1; transform: none; }
+    @media (max-width: 580px) {
+      .svc-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ════════════════════════════════
+       FEATURED WORK
+    ════════════════════════════════ */
+    #work { padding-top: 0; }
+    #work .sec-label { margin-bottom: 0.75rem; }
+    #work .t-h2 { margin-bottom: clamp(2rem, 4vw, 3.5rem); }
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 0.9rem;
+    }
+    .wcard { border-radius: var(--radius); overflow: hidden; position: relative; cursor: pointer; }
+    .wcard:first-child { grid-row: span 2; }
+    .wcard-vis {
+      width: 100%;
+      height: 100%;
+      min-height: 260px;
+      position: relative;
+      overflow: hidden;
+    }
+    .wcard:first-child .wcard-vis { min-height: 540px; }
+    .wcard-bg {
+      position: absolute; inset: 0;
+      transition: transform 0.55s ease;
+    }
+    .wcard:hover .wcard-bg { transform: scale(1.05); }
+    .wcard-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(15,35,24,0.92) 0%, transparent 55%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.6rem;
+    }
+    .wcard-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.45rem;
+    }
+    .wcard-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(0.95rem, 1.8vw, 1.25rem);
+      font-weight: 700;
+      line-height: 1.25;
+    }
+    @media (max-width: 700px) {
+      .work-grid { grid-template-columns: 1fr; }
+      .wcard:first-child { grid-row: span 1; }
+      .wcard:first-child .wcard-vis { min-height: 280px; }
+    }
+
+    /* ════════════════════════════════
+       APPROACH
+    ════════════════════════════════ */
+    #approach {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .approach-inner {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: clamp(2.5rem, 6vw, 5rem);
+      align-items: start;
+    }
+    @media (max-width: 700px) {
+      .approach-inner { grid-template-columns: 1fr; }
+    }
+    .approach-lede { position: sticky; top: 7rem; }
+    .approach-lede .t-h2 { margin: 1rem 0 1.25rem; }
+    .steps { display: flex; flex-direction: column; }
+    .step {
+      display: grid;
+      grid-template-columns: 3.2rem 1fr;
+      gap: 1.4rem;
+      padding: 2.1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .step:last-child { border-bottom: none; }
+    .step-n {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--gold);
+      padding-top: 0.15rem;
+    }
+    .step h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.55rem;
+    }
+    .step p { font-size: 0.875rem; line-height: 1.75; color: var(--sage); }
+
+    /* ════════════════════════════════
+       TESTIMONIAL
+    ════════════════════════════════ */
+    #testimonial {
+      text-align: center;
+      padding: clamp(5rem, 13vw, 10rem) 0;
+    }
+    .t-rule {
+      width: 3rem; height: 1px;
+      background: var(--border);
+      margin: 0 auto 3.5rem;
+    }
+    .quote-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.3rem, 2.8vw, 2.1rem);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.5;
+      max-width: 780px;
+      margin: 0 auto 2rem;
+    }
+    .quote-text::before { content: '\201C'; color: var(--gold); }
+    .quote-text::after  { content: '\201D'; color: var(--gold); }
+    .quote-author {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .q-avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: var(--bg-raise);
+      border: 1px solid var(--border);
+      display: grid; place-items: center;
+      flex-shrink: 0;
+    }
+    .q-name { font-weight: 500; font-size: 0.88rem; }
+    .q-role { font-size: 0.76rem; color: var(--muted); }
+
+    /* ════════════════════════════════
+       CTA
+    ════════════════════════════════ */
+    #cta {
+      position: relative;
+      text-align: center;
+      padding: clamp(5.5rem, 13vw, 10rem) 0;
+      border-top: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .cta-rings {
+      position: absolute; inset: 0;
+      pointer-events: none;
+    }
+    .cta-rings svg { width: 100%; height: 100%; }
+    .cta-content { position: relative; z-index: 1; }
+    #cta .t-label { margin-bottom: 1.25rem; }
+    #cta .t-h2 { max-width: 560px; margin: 0 auto 1.2rem; }
+    #cta .t-body { max-width: 440px; margin: 0 auto 2.4rem; }
+    .cta-btns { display: flex; gap: 0.9rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ════════════════════════════════
+       FOOTER
+    ════════════════════════════════ */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.25rem 0;
+    }
+    .foot-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+    }
+    .foot-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .foot-links a { font-size: 0.8rem; color: var(--muted); transition: color 0.2s; }
+    .foot-links a:hover { color: var(--cream); }
+    .foot-copy {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ════════════════════════════════
+       REVEAL ANIMATION
+    ════════════════════════════════ */
+    .r {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .r.on { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.1s; }
+    .d2 { transition-delay: 0.2s; }
+    .d3 { transition-delay: 0.3s; }
+    .d4 { transition-delay: 0.4s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .r { opacity: 1; transform: none; transition: none; }
+      .ring-1, .ring-2, .ring-3 { animation: none; }
+      .scroll-line { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     NAVIGATION
+══════════════════════════════════ -->
+<nav id="nav">
+  <div class="wrap nav-row">
+    <a href="#" class="nav-brand">
+      <div class="brand-dot"><span>M</span></div>
+      MERIDIAN
+    </a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#approach">Approach</a></li>
+      <li><a href="#cta">Contact</a></li>
+    </ul>
+    <a href="#cta" class="btn btn-gold">Start a project</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════
+     HERO
+══════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-canvas" aria-hidden="true">
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="rg1" cx="18%" cy="78%" r="55%">
+          <stop offset="0%" stop-color="#1F4D36" stop-opacity="0.65"/>
+          <stop offset="100%" stop-color="#0F2318" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="rg2" cx="82%" cy="18%" r="48%">
+          <stop offset="0%" stop-color="#C9A84C" stop-opacity="0.07"/>
+          <stop offset="100%" stop-color="#0F2318" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="1440" height="900" fill="#0F2318"/>
+      <rect width="1440" height="900" fill="url(#rg1)"/>
+      <rect width="1440" height="900" fill="url(#rg2)"/>
+
+      <!-- Fine coordinate grid -->
+      <g stroke="#2A4F36" stroke-width="0.35" fill="none" opacity="0.22">
+        <line x1="0" y1="150" x2="1440" y2="150"/><line x1="0" y1="300" x2="1440" y2="300"/>
+        <line x1="0" y1="450" x2="1440" y2="450"/><line x1="0" y1="600" x2="1440" y2="600"/>
+        <line x1="0" y1="750" x2="1440" y2="750"/>
+        <line x1="240" y1="0" x2="240" y2="900"/><line x1="480" y1="0" x2="480" y2="900"/>
+        <line x1="720" y1="0" x2="720" y2="900"/><line x1="960" y1="0" x2="960" y2="900"/>
+        <line x1="1200" y1="0" x2="1200" y2="900"/>
+      </g>
+
+      <!-- Meridian circles — the signature element -->
+      <g class="ring ring-1" stroke="#2A4F36" stroke-width="0.5" fill="none" opacity="0.35">
+        <circle cx="720" cy="450" r="380"/>
+        <circle cx="720" cy="450" r="280"/>
+      </g>
+      <g class="ring ring-2" stroke="#2A4F36" stroke-width="0.4" fill="none" opacity="0.25">
+        <circle cx="720" cy="450" r="480"/>
+        <circle cx="720" cy="450" r="180"/>
+      </g>
+      <g class="ring ring-3" stroke="#C9A84C" stroke-width="0.3" fill="none" opacity="0.12">
+        <circle cx="720" cy="450" r="560"/>
+        <circle cx="720" cy="450" r="90"/>
+      </g>
+
+      <!-- Cross hairs -->
+      <g stroke="#2A4F36" stroke-width="0.4" opacity="0.3">
+        <line x1="720" y1="0" x2="720" y2="900"/>
+        <line x1="0" y1="450" x2="1440" y2="450"/>
+      </g>
+      <circle cx="720" cy="450" r="4" fill="#C9A84C" opacity="0.25"/>
+      <circle cx="720" cy="450" r="8" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.2"/>
+    </svg>
+  </div>
+
+  <div class="wrap hero-content">
+    <div class="hero-eye">
+      <span class="t-label">Strategic Advisory — Global Practice</span>
+    </div>
+
+    <div class="hero-hl t-display r">
+      Where rigorous strategy<br>meets <em>decisive action.</em>
+    </div>
+
+    <p class="t-body hero-sub r d1">
+      Meridian partners with organisations navigating complex challenges—translating deep analysis into clarity, and clarity into outcomes that endure.
+    </p>
+
+    <div class="hero-ctas r d2">
+      <a href="#work"     class="btn btn-gold">View our work →</a>
+      <a href="#services" class="btn btn-ghost">Our services</a>
+    </div>
+  </div>
+
+  <div class="scroll-cue" aria-hidden="true">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     METRICS BAND
+══════════════════════════════════ -->
+<div id="metrics">
+  <div class="metrics-grid">
+    <div class="metric r">
+      <div class="metric-num">340<sup>+</sup></div>
+      <div class="t-label" style="margin-bottom:0.2rem">Engagements</div>
+      <div class="metric-desc">Across 6 continents, 38 sectors</div>
+    </div>
+    <div class="metric r d1">
+      <div class="metric-num">15<sup>+</sup></div>
+      <div class="t-label" style="margin-bottom:0.2rem">Years of practice</div>
+      <div class="metric-desc">Founded in Lagos, operating globally</div>
+    </div>
+    <div class="metric r d2">
+      <div class="metric-num">97<sup>%</sup></div>
+      <div class="t-label" style="margin-bottom:0.2rem">Client retention</div>
+      <div class="metric-desc">Measured across five-year cohorts</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SERVICES
+══════════════════════════════════ -->
+<section id="services" class="section">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="t-label r" style="margin-bottom:1rem">What we do</p>
+        <h2 class="t-h2 r d1">Built for complexity.<br>Designed for clarity.</h2>
+      </div>
+      <p class="t-body r d2">
+        Our practice spans four interconnected disciplines — each one grounded in evidence, shaped by experience, and calibrated to the realities of your operating environment.
+      </p>
+    </div>
+
+    <div class="svc-grid">
+
+      <div class="svc-card r">
+        <div class="svc-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/><path d="M2 12h4M18 12h4M12 2v4M12 18v4"/>
+          </svg>
+        </div>
+        <h3 class="t-h3">Corporate Strategy</h3>
+        <p>From market entry to enterprise transformation, we work alongside leadership teams to define where to compete, how to win, and what to build next.</p>
+        <span class="svc-more">Explore ——›</span>
+      </div>
+
+      <div class="svc-card r d1">
+        <div class="svc-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20A15 15 0 0 1 12 2z"/>
+          </svg>
+        </div>
+        <h3 class="t-h3">Sustainability & ESG</h3>
+        <p>We help institutions embed sustainability into strategy — not as compliance, but as a genuine source of competitive advantage and long-term resilience.</p>
+        <span class="svc-more">Explore ——›</span>
+      </div>
+
+      <div class="svc-card r d2">
+        <div class="svc-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <h3 class="t-h3">Organisational Design</h3>
+        <p>Structure follows strategy. We redesign organisations so that people, processes, and incentives align behind what matters — and stay aligned through change.</p>
+        <span class="svc-more">Explore ——›</span>
+      </div>
+
+      <div class="svc-card r d3">
+        <div class="svc-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <h3 class="t-h3">Policy & Regulatory Affairs</h3>
+        <p>In regulated industries and complex governance environments, we provide the analysis, frameworks, and engagement strategies that shape outcomes at the policy level.</p>
+        <span class="svc-more">Explore ——›</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     FEATURED WORK
+══════════════════════════════════ -->
+<section id="work" class="section" style="padding-top:0">
+  <div class="wrap">
+    <p class="t-label sec-label r">Selected engagements</p>
+    <h2 class="t-h2 r d1">Strategy in practice.</h2>
+
+    <div class="work-grid">
+
+      <!-- Card 1 — tall -->
+      <div class="wcard r">
+        <div class="wcard-vis">
+          <div class="wcard-bg" style="background:linear-gradient(160deg,#1A3828 0%,#0D2B1A 55%,#2E4D30 100%)"></div>
+          <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 580 580" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <pattern id="hx" width="58" height="50" patternUnits="userSpaceOnUse">
+                <polygon points="29,2 56,16 56,44 29,58 2,44 2,16" fill="none" stroke="#2A4F36" stroke-width="0.5"/>
+              </pattern>
+            </defs>
+            <rect width="580" height="580" fill="url(#hx)" opacity="0.45"/>
+            <circle cx="290" cy="290" r="150" fill="none" stroke="#C9A84C" stroke-width="0.6" opacity="0.35"/>
+            <circle cx="290" cy="290" r="90"  fill="none" stroke="#C9A84C" stroke-width="0.6" opacity="0.25"/>
+            <circle cx="290" cy="290" r="35"  fill="#C9A84C" opacity="0.12"/>
+            <line x1="290" y1="140" x2="290" y2="440" stroke="#C9A84C" stroke-width="0.4" opacity="0.2"/>
+            <line x1="140" y1="290" x2="440" y2="290" stroke="#C9A84C" stroke-width="0.4" opacity="0.2"/>
+          </svg>
+          <div class="wcard-overlay">
+            <div class="wcard-tag">Maritime · Infrastructure</div>
+            <div class="wcard-title">Nigerian Blue Economy Strategy — Port Authority Transformation Programme</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="wcard r d1">
+        <div class="wcard-vis">
+          <div class="wcard-bg" style="background:linear-gradient(140deg,#1F2B3D 0%,#0F1D2E 100%)"></div>
+          <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 540 270" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="wvg" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#C9A84C" stop-opacity="0"/>
+                <stop offset="50%" stop-color="#C9A84C" stop-opacity="0.55"/>
+                <stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <rect width="540" height="270" fill="#0F1D2E"/>
+            <g stroke="url(#wvg)" stroke-width="0.9" fill="none">
+              <path d="M0,135 C135,80 270,190 405,135 S540,90 540,135"/>
+              <path d="M0,155 C135,100 270,210 405,155 S540,110 540,155" opacity="0.5"/>
+              <path d="M0,115 C135,60 270,170 405,115 S540,70 540,115" opacity="0.3"/>
+            </g>
+            <g stroke="#1F3555" stroke-width="0.4" fill="none" opacity="0.4">
+              <line x1="0" y1="90" x2="540" y2="90"/>
+              <line x1="0" y1="180" x2="540" y2="180"/>
+            </g>
+          </svg>
+          <div class="wcard-overlay">
+            <div class="wcard-tag">Energy · Policy</div>
+            <div class="wcard-title">Energy Transition Roadmap for West African State</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="wcard r d2">
+        <div class="wcard-vis">
+          <div class="wcard-bg" style="background:linear-gradient(140deg,#2B1B0F 0%,#3D2A10 100%)"></div>
+          <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 540 270" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <rect width="540" height="270" fill="#2B1B0F"/>
+            <g stroke="#C9A84C" stroke-width="0.4" opacity="0.18">
+              <line x1="0" y1="0" x2="540" y2="270"/>
+              <line x1="108" y1="0" x2="540" y2="162"/>
+              <line x1="216" y1="0" x2="540" y2="162"/>
+              <line x1="324" y1="0" x2="540" y2="162"/>
+              <line x1="0" y1="108" x2="540" y2="270"/>
+            </g>
+            <circle cx="430" cy="75" r="80" fill="#C9A84C" opacity="0.07"/>
+            <circle cx="430" cy="75" r="50" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.2"/>
+          </svg>
+          <div class="wcard-overlay">
+            <div class="wcard-tag">Education · Capacity Building</div>
+            <div class="wcard-title">Environmental Training Ecosystem Design — Pan-African Reach</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     APPROACH
+══════════════════════════════════ -->
+<section id="approach" class="section">
+  <div class="wrap">
+    <div class="approach-inner">
+
+      <div class="approach-lede">
+        <p class="t-label r">How we work</p>
+        <h2 class="t-h2 r d1">A method built on rigour.</h2>
+        <p class="t-body r d2" style="font-size:0.875rem">
+          Every engagement follows the same disciplined process — adapted to your context, never templated to someone else's.
+        </p>
+      </div>
+
+      <div class="steps">
+        <div class="step r">
+          <div class="step-n">01 /</div>
+          <div>
+            <h4>Diagnose</h4>
+            <p>We open with deep listening. A structured discovery phase — stakeholder interviews, data review, competitive mapping — surfaces the real problem beneath the presenting one.</p>
+          </div>
+        </div>
+        <div class="step r d1">
+          <div class="step-n">02 /</div>
+          <div>
+            <h4>Design</h4>
+            <p>Strategy is only as good as its internal logic. We construct recommendations that are evidence-based, financially grounded, and pressure-tested against your actual constraints.</p>
+          </div>
+        </div>
+        <div class="step r d2">
+          <div class="step-n">03 /</div>
+          <div>
+            <h4>Activate</h4>
+            <p>We stay in the room through implementation. Our teams embed with yours, tracking progress, resolving friction, and course-correcting in real time.</p>
+          </div>
+        </div>
+        <div class="step r d3">
+          <div class="step-n">04 /</div>
+          <div>
+            <h4>Transfer</h4>
+            <p>The measure of a good engagement is what happens after we leave. We build the internal capability, tools, and confidence for your teams to sustain the momentum independently.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     TESTIMONIAL
+══════════════════════════════════ -->
+<section id="testimonial" class="section">
+  <div class="wrap">
+    <div class="t-rule"></div>
+    <blockquote class="quote-text r">
+      Meridian didn't just give us a strategy document. They gave us the language, the framework, and the confidence to make decisions we'd been deferring for years.
+    </blockquote>
+    <div class="quote-author r d1">
+      <div class="q-avatar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8FAF94" stroke-width="1" stroke-linecap="round">
+          <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+      </div>
+      <div>
+        <div class="q-name">Dr. Adaora Okonkwo</div>
+        <div class="q-role">Group MD, Enviro Holdings — Lagos</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     CTA
+══════════════════════════════════ -->
+<section id="cta">
+  <div class="cta-rings" aria-hidden="true">
+    <svg viewBox="0 0 1440 520" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="ctag" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#1F4D36" stop-opacity="0.45"/>
+          <stop offset="100%" stop-color="#0F2318" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="1440" height="520" fill="url(#ctag)"/>
+      <circle cx="720" cy="260" r="380" fill="none" stroke="#2A4F36" stroke-width="0.5" opacity="0.4"/>
+      <circle cx="720" cy="260" r="260" fill="none" stroke="#2A4F36" stroke-width="0.5" opacity="0.3"/>
+      <circle cx="720" cy="260" r="140" fill="none" stroke="#C9A84C" stroke-width="0.4" opacity="0.18"/>
+      <circle cx="720" cy="260" r="40"  fill="#C9A84C" opacity="0.06"/>
+    </svg>
+  </div>
+  <div class="wrap cta-content">
+    <p class="t-label r">Ready to begin?</p>
+    <h2 class="t-h2 r d1">Let's work on something<br>that matters.</h2>
+    <p class="t-body r d2">Every engagement starts with a conversation. Tell us about your challenge — and we'll tell you how we can help.</p>
+    <div class="cta-btns r d3">
+      <a href="mailto:hello@meridian-advisory.com" class="btn btn-gold">Get in touch →</a>
+      <a href="#work" class="btn btn-ghost">Review our work</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     FOOTER
+══════════════════════════════════ -->
+<footer>
+  <div class="wrap">
+    <div class="foot-row">
+      <div class="nav-brand">
+        <div class="brand-dot"><span>M</span></div>
+        MERIDIAN ADVISORY GROUP
+      </div>
+      <ul class="foot-links">
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Work</a></li>
+        <li><a href="#">Approach</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Privacy</a></li>
+      </ul>
+      <div class="foot-copy">© 2026 Meridian Advisory Group</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* --- Nav sticky --- */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('stuck', window.scrollY > 50);
+  }, { passive: true });
+
+  /* --- Scroll reveal --- */
+  const els = document.querySelectorAll('.r');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -36px 0px' });
+  els.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
